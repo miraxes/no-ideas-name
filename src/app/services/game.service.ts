@@ -16,7 +16,7 @@ export class GameService {
     private bombGenerator: Subscription = new Subscription();
     private game: Subscription = new Subscription();
     private currentBombTimer = 3000;
-    private bombsCount = 3;
+    private bombsCount = 120;
 
     private swapper = new BehaviorSubject<Bin[]>(this.currentBins);
     private bombs = new Subject<Bomb>();
@@ -40,16 +40,6 @@ export class GameService {
       this.calculateBombing(this.currentBombTimer);
     }
 
-    private startCounter() {
-      return this.game = Observable.interval(1000).subscribe(time => {
-        this.counterBins--;
-        if (this.counterBins < 0) {
-          this.game.unsubscribe();
-          this.initBinsSwapper();
-        }
-      });
-    }
-
     finishGame() {
       this.subs.forEach(s => s.unsubscribe());
       this.finish.next(true);
@@ -68,8 +58,17 @@ export class GameService {
     }
 
     explode(i: number, exp: boolean) {
-      console.log('explode');
       this.explosion.next({index: i, correct: exp});
+    }
+
+    private startCounter() {
+      return this.game = Observable.interval(1000).subscribe(time => {
+        this.counterBins--;
+        if (this.counterBins < 0) {
+          this.game.unsubscribe();
+          this.initBinsSwapper();
+        }
+      });
     }
 
     private initBinsSwapper() {

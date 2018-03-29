@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
   }
 
   boomBomb(index: number, defused: boolean = false) {
-    console.log('boomBomb');
     this.bombs.splice(index, 1);
     if (defused) {
       ++this.score;
@@ -45,7 +44,6 @@ export class AppComponent implements OnInit {
 
   start() {
     this.gameMode = GameMode.InProgress;
-    console.log('PROGRESS');
     this.subs.push(this.game.binsSwap$.subscribe(swapper => {
       this.bins = swapper;
     }));
