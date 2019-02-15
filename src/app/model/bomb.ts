@@ -6,10 +6,18 @@ export class Bomb {
 
   constructor() {
     this.color = this.randomColor();
-    this.lifetime = Math.floor(Math.random() * (11 - 5)) + 5;
+    this.lifetime = this.randomLifeTime();
   }
 
   private randomColor(): Color {
-    return (Math.random() > .33) ? (Math.random() > .66) ? Color.One : Color.Two : Color.Three;
+    return Math.random() > 0.33
+      ? Math.random() > 0.66
+        ? Color.One
+        : Color.Two
+      : Color.Three;
+  }
+
+  private randomLifeTime(): number {
+    return Math.floor(Math.random() * (11 - 5)) + 5;
   }
 }

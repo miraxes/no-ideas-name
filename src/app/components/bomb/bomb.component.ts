@@ -1,35 +1,42 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/timer';
-import { Color, Bomb } from '../../model';
+
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import { Bomb, Color } from '../../model';
 
 @Component({
-    selector: 'app-bomb',
-    templateUrl: './bomb.component.html'
+  selector: 'app-bomb',
+  templateUrl: './bomb.component.html'
 })
 export class BombComponent implements OnInit {
-    @Input() bomb: Bomb;
-    timeLeft: number;
-    sub: Subscription;
-    @Output() destroy = new EventEmitter<void>();
-    Color = Color;
-    constructor() {
-    }
+  @Input() bomb: Bomb;
+  @Output() destroy = new EventEmitter<void>();
+  timeLeft: number;
+  sub: Subscription;
+  Color = Color;
 
-    ngOnInit() {
-      this.timeLeft = this.bomb.lifetime;
-      this.sub = Observable.interval(1000).take(this.bomb.lifetime).subscribe(_ => {
+  constructor() { }
+
+  ngOnInit(): void {
+    this.timeLeft = this.bomb.lifetime;
+    this.sub = Observable
+      .interval(1000)
+      .take(this.bomb.lifetime)
+      .subscribe(() => {
         this.timeLeft--;
       });
-      Observable.timer(1000 * this.bomb.lifetime).take(1).subscribe(_ => this.boom());
-    }
+    Observable
+      .timer(1000 * this.bomb.lifetime)
+      .take(1)
+      .subscribe(() => this.boom());
+  }
 
-    boom() {
-      this.sub.unsubscribe();
-      this.destroy.emit();
-    }
-
+  private boom(): void {
+    this.sub.unsubscribe();
+    this.destroy.emit();
+  }
 }

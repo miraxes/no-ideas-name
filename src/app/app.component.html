@@ -1,24 +1,30 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center" [ngSwitch]="gameMode">
-  <div class="" *ngSwitchCase="mode.Finished">
-      The game is finished!
-      You scored: {{score}}!
-
-      <button type="button" name="button" (click)="restart()">try again?</button>
+  <div *ngSwitchCase="mode.Finished">
+    The game is finished! You scored: {{ score }}!
+    <button type="button" name="button" (click)="restart()">try again?</button>
   </div>
-  <div class="" *ngSwitchCase="mode.InProgress">
-    Your score: {{score}}
+  <div *ngSwitchCase="mode.InProgress">
+    Your score: {{ score }}
     <div class="area" appMovableArea>
-      <app-bomb class="bomb-holder" appMovable [bomb]="b" *ngFor="let b of bombs; let i = index"
-              (dragEnd)="drop($event, i, b)" (dragMove)="moving($event, i, b)" (destroy)="boomBomb(i)"></app-bomb>
+      <app-bomb
+        class="bomb-holder"
+        appMovable
+        [bomb]="b"
+        *ngFor="let b of bombs; let i = index"
+        (dragEnd)="drop($event, i, b)"
+        (dragMove)="moving($event, i, b)"
+        (destroy)="boomBomb(i)"
+      ></app-bomb>
       <app-bin class="bin-holder" [bin]="b" *ngFor="let b of bins"></app-bin>
     </div>
-    Bins color swap in: {{game.counterBins}} seconds!
+    Bins color swap in: {{ game.counterBins }} seconds!
   </div>
-  <div class="" *ngSwitchDefault>
+  <div *ngSwitchDefault>
     <h1>
       Welcome to GAME!
     </h1>
     To start awesome game click button below
     <button type="button" name="button" (click)="start()">Start!</button>
   </div>
+</div>

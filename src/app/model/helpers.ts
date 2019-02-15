@@ -4,6 +4,12 @@ export enum Color {
   Three
 }
 
+export enum GameMode {
+  Start,
+  InProgress,
+  Finished
+}
+
 export interface Coordinates {
   x: number;
   y: number;
@@ -14,10 +20,4 @@ export interface Coordinates {
 export interface Explosion {
   index: number;
   correct: boolean;
-}
-
-export enum GameMode {
-  Start,
-  InProgress,
-  Finished
 }
