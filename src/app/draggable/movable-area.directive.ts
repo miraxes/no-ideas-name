@@ -1,6 +1,14 @@
-import { AfterContentInit, ContentChildren, Directive, ElementRef, QueryList } from '@angular/core';
-import { MovableDirective } from './movable.directive';
 import { Subscription } from 'rxjs/Subscription';
+
+import {
+  AfterContentInit,
+  ContentChildren,
+  Directive,
+  ElementRef,
+  QueryList
+} from '@angular/core';
+
+import { MovableDirective } from './movable.directive';
 
 interface Boundaries {
   minX: number;
@@ -25,25 +33,29 @@ export class MovableAreaDirective implements AfterContentInit {
       this.subscriptions.forEach(s => s.unsubscribe());
 
       this.movables.forEach(movable => {
-        this.subscriptions.push(movable.dragStart.subscribe(() => this.measureBoundaries(movable)));
-        this.subscriptions.push(movable.dragMove.subscribe(() => this.maintainBoundaries(movable)));
+        this.subscriptions.push(
+          movable.dragStart.subscribe(() => this.measureBoundaries(movable))
+        );
+        this.subscriptions.push(
+          movable.dragMove.subscribe(() => this.maintainBoundaries(movable))
+        );
       });
     });
   }
 
-  private measureBoundaries(movable: MovableDirective) {
-    const viewRect: ClientRect = this.element.nativeElement.getBoundingClientRect();
+  private measureBoundaries(movable: MovableDirective): void {
+    const viewRectangle: ClientRect = this.element.nativeElement.getBoundingClientRect();
     const movableClientRect: ClientRect = movable.element.nativeElement.getBoundingClientRect();
 
     this.boundaries = {
-      minX: viewRect.left - movableClientRect.left + movable.position.x,
-      maxX: viewRect.right - movableClientRect.right + movable.position.x,
-      minY: viewRect.top - movableClientRect.top + movable.position.y,
-      maxY: viewRect.bottom - movableClientRect.bottom + movable.position.y
+      minX: viewRectangle.left - movableClientRect.left + movable.position.x,
+      maxX: viewRectangle.right - movableClientRect.right + movable.position.x,
+      minY: viewRectangle.top - movableClientRect.top + movable.position.y,
+      maxY: viewRectangle.bottom - movableClientRect.bottom + movable.position.y
     };
   }
 
-  private maintainBoundaries(movable: MovableDirective) {
+  private maintainBoundaries(movable: MovableDirective): void {
     movable.position.x = Math.max(this.boundaries.minX, movable.position.x);
     movable.position.x = Math.min(this.boundaries.maxX, movable.position.x);
     movable.position.y = Math.max(this.boundaries.minY, movable.position.y);

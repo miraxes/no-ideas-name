@@ -1,6 +1,13 @@
-import { Directive, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
-import { DraggableDirective } from './draggable.directive';
+import {
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input
+} from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+
+import { DraggableDirective } from './draggable.directive';
 
 interface Position {
   x: number;
@@ -11,26 +18,25 @@ interface Position {
   selector: '[appMovable]'
 })
 export class MovableDirective extends DraggableDirective {
+  @Input('reset') reset = false;
+
   @HostBinding('style.transform') get transform(): SafeStyle {
     return this.sanitizer.bypassSecurityTrustStyle(
       `translateX(${this.position.x}px) translateY(${this.position.y}px)`
     );
   }
-
   @HostBinding('class.movable') movable = true;
 
-  position: Position = {x: 0, y: 0};
+  position: Position = { x: 0, y: 0 };
 
   private startPosition: Position;
-
-  @Input('reset') reset = false;
 
   constructor(private sanitizer: DomSanitizer, public element: ElementRef) {
     super();
   }
 
   @HostListener('dragStart', ['$event'])
-  onDragStart(event: PointerEvent) {
+  onDragStart(event: PointerEvent): void {
     this.startPosition = {
       x: event.clientX - this.position.x,
       y: event.clientY - this.position.y
@@ -38,15 +44,15 @@ export class MovableDirective extends DraggableDirective {
   }
 
   @HostListener('dragMove', ['$event'])
-  onDragMove(event: PointerEvent) {
+  onDragMove(event: PointerEvent): void {
     this.position.x = event.clientX - this.startPosition.x;
     this.position.y = event.clientY - this.startPosition.y;
   }
 
   @HostListener('dragEnd', ['$event'])
-  onDragEnd(event: PointerEvent) {
+  onDragEnd(): void {
     if (this.reset) {
-      this.position = {x: 0, y: 0};
+      this.position = { x: 0, y: 0 };
     }
   }
 }
